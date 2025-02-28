@@ -3,9 +3,7 @@ Giới thiệu
 
 Dự án cung cấp API xác thực người dùng với các chức năng:
 
-Đăng ký người dùng mới
-
-Đăng nhập
+Đăng ký người dùng mới,Đăng nhập,Sửa,Xóa
 
 Xác thực JWT
 
