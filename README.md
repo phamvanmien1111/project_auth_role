@@ -43,14 +43,14 @@ npm run start
 
 Server sẽ chạy tại http://localhost:5000
  API Endpoints
-
+Em sử dụng công cụ postman để đăng ký,đăng nhập,update,delete
  Đăng ký người dùng
 
 Endpoint: /api/auth/register
 
 Method: POST
 
-Request Body:
+Request Body[]:
 
 {
   "username": "mien1",
@@ -71,7 +71,7 @@ Endpoint: /api/auth/login
 
 Method: POST
 
-Request Body:
+Request Body [raw]:
 
 {
   "email": "admi1n@example.com",
@@ -87,4 +87,54 @@ Response:
         "email": "admi1n@example.com",
         "role": "admin"
     }
+}
+Updated
+
+Endpoint: /api/auth/users/:id
+
+Method: PUT
+
+Request Body[raw]:
+{
+  "_id": {
+    "$oid": "67c1fa0ac4ca44deba4c3a35"
+  },
+  "username": "11111",
+  "email": "ad2min@example.com",
+  "password": "$2b$10$P0HY7MXQ2zRwhZWBtrOiZ.vvnrhYhDnVaPeJMzT3zBh7qWAotiBAC",
+  "role": "user",
+  "__v": 0
+}
+Response:
+{
+    "message": "Cập nhật thành công",
+    "user": {
+        "_id": "67c1fa0ac4ca44deba4c3a35",
+        "username": "mien",
+        "email": "ad2min@example.com",
+        "password": "$2b$10$iu3n/RMIJlKrFe4xd3zFKuYk5EsjYHXLhaVkk2L8QpLdi54L4/lO2",
+        "role": "user",
+        "__v": 0
+    }
+}
+Delete
+
+Endpoint: /api/auth/users/:id
+
+Method: DELETE
+
+Request Body[raw]:
+{
+  "_id": {
+    "$oid": "67c1fa0ac4ca44deba4c3a35"
+  },
+  "username": "11111",
+  "email": "ad2min@example.com",
+  "password": "$2b$10$P0HY7MXQ2zRwhZWBtrOiZ.vvnrhYhDnVaPeJMzT3zBh7qWAotiBAC",
+  "role": "user",
+  "__v": 0
+}
+Response:
+{
+    "message": "Xóa user thành công"
 }

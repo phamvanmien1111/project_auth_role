@@ -11,6 +11,8 @@ const router = express_1.default.Router();
 router.get("/users", auth_controller_1.default.getAllUsers);
 router.post("/register", auth_controller_1.default.register.bind(auth_controller_1.default));
 router.post("/login", auth_controller_1.default.login.bind(auth_controller_1.default));
+router.delete("/users/:id", auth_controller_1.default.deleteUser.bind(auth_controller_1.default));
+router.put("/users/:id", auth_controller_1.default.updateUser.bind(auth_controller_1.default));
 router.get("/admin", auth_middleware_1.default.authenticate, auth_middleware_1.default.isAdmin, (req, res) => {
     res.json({ message: "Welcome Admin!" });
 });

@@ -33,10 +33,10 @@ class UserController {
                 console.log("Request Body:", req.body); // 📌 Debug
                 const { username, email, password, role } = req.body;
                 if (!password) {
-                    return res.status(400).json({ message: "Password is required" });
+                    return res.status(400).json({ message: "Cần có pass" });
                 }
                 if (yield user_model_1.default.findOne({ email })) {
-                    return res.status(400).json({ message: "Email already in use" });
+                    return res.status(400).json({ message: "Email đã được sử dụng" });
                 }
                 const hashedPassword = yield bcryptjs_1.default.hash(password, 10);
                 // 🟢 Kiểm tra nếu role bị undefined hoặc null
@@ -47,7 +47,7 @@ class UserController {
                     role: role && ["user", "admin"].includes(role) ? role : "user"
                 });
                 yield newUser.save();
-                return res.status(201).json({ message: "User registered successfully" });
+                return res.status(201).json({ message: "Đăng Ký Thành công" });
             }
             catch (error) {
                 next(error);
@@ -60,19 +60,62 @@ class UserController {
                 const { email, password } = req.body;
                 const user = yield user_model_1.default.findOne({ email });
                 if (!user)
-                    return res.status(400).json({ message: "Invalid credentials" });
+                    return res.status(400).json({ message: "Thông tin không hợp lệ" });
                 if (!(yield bcryptjs_1.default.compare(password, user.password))) {
-                    return res.status(400).json({ message: "Invalid credentials" });
+                    return res.status(400).json({ message: "Thông tin không hợp lệ" });
                 }
                 const secret = process.env.JWT_SECRET;
                 if (!secret)
-                    throw new Error("JWT_SECRET is not defined");
+                    throw new Error("JWT_SECRET không xác định");
                 console.log("User Role:", user.role); // 📌 Debug
                 const token = jsonwebtoken_1.default.sign({ id: user._id, role: user.role }, secret, { expiresIn: "1h" });
                 return res.json({
                     token,
                     user: { id: user._id, username: user.username, email: user.email, role: user.role }
                 });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    updateUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const { username, email, password, role } = req.body;
+                // Tìm user
+                const user = yield user_model_1.default.findById(id);
+                if (!user) {
+                    return res.status(404).json({ message: "User không tồn tại" });
+                }
+                if (username)
+                    user.username = username;
+                if (email)
+                    user.email = email;
+                if (role && ["user", "admin"].includes(role))
+                    user.role = role;
+                if (password) {
+                    user.password = yield bcryptjs_1.default.hash(password, 10);
+                }
+                yield user.save();
+                return res.json({ message: "Cập nhật thành công", user });
+            }
+            catch (error) {
+                next(error);
+            }
+        });
+    }
+    deleteUser(req, res, next) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id } = req.params;
+                const user = yield user_model_1.default.findById(id);
+                if (!user) {
+                    return res.status(404).json({ message: "User không tồn tại" });
+                }
+                yield user_model_1.default.findByIdAndDelete(id);
+                return res.json({ message: "Xóa user thành công" });
             }
             catch (error) {
                 next(error);

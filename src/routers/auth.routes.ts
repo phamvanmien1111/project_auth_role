@@ -7,8 +7,8 @@ const router = express.Router();
 router.get("/users", UserController.getAllUsers);
 router.post("/register", UserController.register.bind(UserController) as express.RequestHandler);
 router.post("/login", UserController.login.bind(UserController) as express.RequestHandler);
-
-
+router.delete("/users/:id", UserController.deleteUser.bind(UserController) as express.RequestHandler);
+router.put("/users/:id", UserController.updateUser.bind(UserController) as express.RequestHandler);
 router.get("/admin", AuthMiddleware.authenticate, AuthMiddleware.isAdmin, (req, res) => {
   res.json({ message: "Welcome Admin!" });
 });
